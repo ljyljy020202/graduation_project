@@ -1,9 +1,9 @@
 import os
 import json
-from openai import OpenAI
+from google import genai
 
-# ✅ OpenAI 클라이언트 초기화
-client = OpenAI(api_key="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")
+# ✅ Gemini 클라이언트 초기화
+client = genai.Client(api_key="AIzaSyA9LiIaH7BChIpv43rAfIJN-e_yyhy2ZeU")
 
 # ✅ 라벨링용 프롬프트 (system 메시지)
 SYSTEM_PROMPT = """
@@ -78,7 +78,7 @@ Model Output:
 
 # 입력/출력 폴더 설정
 input_root = "./Test_DataSet/Normal"
-output_root = "./results_gpt_5_nano/Normal"
+output_root = "./results_gemini_3_pro/Normal"
 
 # test_data 폴더 내의 파일 목록 순회
 for filename in os.listdir(input_root):
@@ -103,32 +103,42 @@ for filename in os.listdir(input_root):
 
     # 파일 읽기
     with open(input_path, "r", encoding="utf-8") as f:
-      try:
-           input_json = json.load(f)
-      except json.JSONDecodeError:
-          print(f"❌ JSON 파싱 실패 (입력): {filename}")
-          continue
+        try:
+            input_json = json.load(f)
+        except json.JSONDecodeError:
+            print(f"❌ JSON 파싱 실패 (입력): {filename}")
+            continue
 
     try:
-        # ✅ API 호출
-        response = client.chat.completions.create(
-        model="gpt-5-nano",
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": json.dumps(input_json, ensure_ascii=False)}
-            ]
+        # ---------------------------------------
+        # ✅ Gemini API 호출
+        # ---------------------------------------
+        # Gemini는 'system' 역할 같은 개념 없이 단일 contents 안에 모두 넣어야 함
+        prompt = [
+            SYSTEM_PROMPT,
+            "\n\n--- JSON INPUT ---\n",
+            json.dumps(input_json, ensure_ascii=False)
+        ]
+
+        response = client.models.generate_content(
+            model="gemini-3-pro-preview",
+            contents=prompt
         )
 
-        content = response.choices[0].message.content.strip()
+        content = response.text.strip()
 
-        # ✅ JSON 파싱 시도
+        # ---------------------------------------
+        # ✅ JSON 파싱
+        # ---------------------------------------
         try:
             result_json = json.loads(content)
         except json.JSONDecodeError:
             print(f"⚠️ JSON 파싱 실패: {filename}")
             result_json = {"raw_response": content}
 
+        # ---------------------------------------
         # ✅ 결과 저장
+        # ---------------------------------------
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(result_json, f, ensure_ascii=False, indent=2)
 
