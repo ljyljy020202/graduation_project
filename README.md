@@ -29,10 +29,10 @@ project/
 ```
 
 ## ⚙️ 실행 환경
-✅ Python 버전
-    Python 3 이상 권장
-✅ 필수 설치 패키지
-    pip install openai google-generativeai python-dotenv
+Python 버전
+- Python 3 이상 권장
+필수 설치 패키지
+- pip install openai google-generativeai python-dotenv
 
 ## 🔐 .env 설정 방법
 프로젝트 루트에 .env 파일을 생성하고 아래 내용을 작성하세요:
@@ -46,14 +46,12 @@ GEMINI_MODEL=gemini-2.5-pro
 ⚠️ .env 파일은 절대 GitHub에 커밋하지 마세요!
 
 ## 🚀 실행 방법
-- OpenAI 기본 실행
-    python openai_main.py
-- OpenAI 계층 구조 입력 대응 실행
-    python openai_v2.py
-- Gemini 기본 실행
-    python gemini_main.py
-- Gemini 계층 구조 입력 대응 실행
-    python gemini_v2.py
+```
+python openai_main.py    # OpenAI 기본 실행
+python openai_v2.py      # OpenAI 계층 구조 입력 대응 실행
+python gemini_main.py    # Gemini 기본 실행
+python gemini_v2.py      # Gemini 계층 구조 입력 대응 실행
+```
 
 ## 🧩 동작 방식 요약
 1. input_data/ 내 텍스트/JSON 데이터 로딩
