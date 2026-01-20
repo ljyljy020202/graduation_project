@@ -29,10 +29,10 @@ project/
 ```
 
 ## ⚙️ 실행 환경
-Python 버전
-- Python 3 이상 권장
-필수 설치 패키지
-- pip install openai google-generativeai python-dotenv
+### Python 버전
+Python 3 이상 권장
+### 필수 설치 패키지
+pip install openai google-generativeai python-dotenv
 
 ## 🔐 .env 설정 방법
 프로젝트 루트에 .env 파일을 생성하고 아래 내용을 작성하세요:
