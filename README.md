@@ -14,10 +14,10 @@ project/
 ├── gemini_main.py      # gemini 요청 기본 스크립트
 ├── gemini_v2.py        # 입력 폴더가 계층 구조인 경우
 ├── common/             # 파일 처리, llm 클라이언트 등 공통 유틸 함수들 모음
-│   ├── __init__.py
 │   ├── prompt_loader.py
 │   ├── config.py
 │   ├── file_utils.py
+│   ├── response_parser.py
 │   └── llm_client.py
 ├── prompts/            # 요청에 사용할 프롬프트 원문 txt
 │   ├── labeling.txt
@@ -32,8 +32,9 @@ project/
 ### Python 버전
 Python 3 이상 권장
 ### 필수 설치 패키지
+```
 pip install openai google-generativeai python-dotenv
-
+```
 ## 🔐 .env 설정 방법
 프로젝트 루트에 .env 파일을 생성하고 아래 내용을 작성하세요:
 
