@@ -1,11 +1,3 @@
-import os
-import json
-from google import genai
-
-client = genai.Client(api_key="AIzaSyA9LiIaH7BChIpv43rAfIJN-e_yyhy2ZeU")
-
-# ✅ 라벨링용 프롬프트 (system 메시지)
-SYSTEM_PROMPT = """
 [SYSTEM ROLE]
 당신은 금융 보안 전문가이자 AI 데이터 라벨러입니다.
 당신의 임무는 주어진 전화 통화 내역을 분석하여, 보이스피싱 의도가 담긴 발화를 식별하고 지정된 JSON 포맷으로 완성하는 것입니다.
@@ -73,65 +65,3 @@ Model Output:
     {"idx": "2", "label": 1, "speaker": "A", "text": "지금 당장 계좌의 잔액을 안전계좌로 이체하셔야 합니다."}
   ]
 }
-"""
-
-# ✅ 입력/출력 폴더 설정
-input_folder = "./Simple_DataSet"
-output_folder = "./results_gemini"
-
-os.makedirs(output_folder, exist_ok=True)
-
-# ✅ 모든 하위 폴더 탐색
-for root, dirs, files in os.walk(input_folder):
-    for file in files:
-        if not file.endswith(".txt"):
-            continue
-
-        input_path = os.path.join(root, file)
-
-        # ✅ results 폴더에 동일한 구조로 출력 폴더 생성
-        relative_path = os.path.relpath(root, input_folder)
-        output_dir = os.path.join(output_folder, relative_path)
-        os.makedirs(output_dir, exist_ok=True)
-
-        output_path = os.path.join(output_dir, file.replace(".txt", ".json"))
-
-        print(f"🔍 Processing: {input_path}")
-
-        # ✅ 파일 내용 읽기
-        with open(input_path, "r", encoding="utf-8") as f:
-            conversation = f.read().strip()
-
-        try:
-            # ✅ Gemini API 요청
-            response = client.models.generate_content(
-                model="gemini-2.5-pro",
-                contents=f"{SYSTEM_PROMPT}\n\n대화 내용:\n{conversation}"
-            )
-
-            content = response.text.strip()
-
-            # ✅ JSON 코드블록 제거 (```json ... ``` 형태 대응)
-            if content.startswith("```"):
-                # 코드블록 시작과 끝을 제거
-                content = content.strip("`")
-                # 'json'이라는 언어 표기 제거
-                content = content.replace("json", "", 1).strip()
-                # 만약 여전히 ``` 가 남아 있으면 제거
-                content = content.replace("```", "").strip()
-
-            # ✅ JSON 파싱 시도
-            try:
-                result_json = json.loads(content)
-            except json.JSONDecodeError:
-                print(f"⚠️ JSON 파싱 실패: {file}")
-                result_json = {"raw_response": content}
-
-            # ✅ 결과 저장
-            with open(output_path, "w", encoding="utf-8") as f:
-                json.dump(result_json, f, ensure_ascii=False, indent=2)
-
-            print(f"✅ Saved: {output_path}")
-
-        except Exception as e:
-            print(f"❌ Error processing {file}: {e}")
