@@ -9,30 +9,30 @@
 
 ```
 project/ 
-├── openai_main.py  # openai 요청 기본 스크립트
-├── openai_v2.py  # 입력 폴더가 계층 구조인 경우 (예 - input 아래 /Normal, /Abnormal 등으로 나뉜 경우 이 구조를 반영하여 그대로 results 파일에 결과를 저장함)
-├── gemini_main.py  # gemini 요청 기본 스크립트
-├── gemini_v2.py  # 입력 폴더가 계층 구조인 경우
-├── common/  # 파일 처리, llm 클라이언트 등 공통 유틸 함수들 모음
+├── openai_main.py      # openai 요청 기본 스크립트
+├── openai_v2.py        # 입력 폴더가 계층 구조인 경우 (예 - input 아래 /Normal, /Abnormal 등으로 나뉜 경우 이 구조를 반영하여 그대로 results 파일에 결과를 저장함)
+├── gemini_main.py      # gemini 요청 기본 스크립트
+├── gemini_v2.py        # 입력 폴더가 계층 구조인 경우
+├── common/             # 파일 처리, llm 클라이언트 등 공통 유틸 함수들 모음
 │   ├── __init__.py
 │   ├── prompt_loader.py
 │   ├── config.py
 │   ├── file_utils.py
 │   └── llm_client.py
-├── prompts/  # 요청에 사용할 프롬프트 원문 txt
+├── prompts/            # 요청에 사용할 프롬프트 원문 txt
 │   ├── labeling.txt
 │   └── data_augment.txt
-├── input_data/  # 입력 데이터 경로
-├── results/  # 출력 데이터 경로
+├── input_data/         # 입력 데이터 경로
+├── results/            # 출력 데이터 경로
 ├── .env
 └── README.md
 ```
 
 ## ⚙️ 실행 환경
 ✅ Python 버전
-Python 3 이상 권장
+    Python 3 이상 권장
 ✅ 필수 설치 패키지
-pip install openai google-generativeai python-dotenv
+    pip install openai google-generativeai python-dotenv
 
 ## 🔐 .env 설정 방법
 프로젝트 루트에 .env 파일을 생성하고 아래 내용을 작성하세요:
@@ -47,13 +47,13 @@ GEMINI_MODEL=gemini-2.5-pro
 
 ## 🚀 실행 방법
 - OpenAI 기본 실행
-  python openai_main.py
+    python openai_main.py
 - OpenAI 계층 구조 입력 대응 실행
-  python openai_v2.py
+    python openai_v2.py
 - Gemini 기본 실행
-  python gemini_main.py
+    python gemini_main.py
 - Gemini 계층 구조 입력 대응 실행
-  python gemini_v2.py
+    python gemini_v2.py
 
 ## 🧩 동작 방식 요약
 1. input_data/ 내 텍스트/JSON 데이터 로딩
